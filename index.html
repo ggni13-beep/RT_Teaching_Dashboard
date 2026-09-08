@@ -1308,11 +1308,18 @@
         }
       }
 
-      // 自動更新儀表板頂部卡片上的「目前在訓學員」總人數
-      const totalCountElem = document.querySelector('main span.text-3xl.font-bold');
-      if (totalCountElem) {
-        totalCountElem.innerHTML = `${count} <span class="text-sm font-normal text-slate-500">名</span>`;
-      }
+      // 自動更新 Dashboard 顯示的學員總人數
+const totalTraineeCount = Object.keys(trainees).length;
+
+const totalCountElem = document.getElementById('totalTraineeCount');
+if (totalCountElem) {
+    totalCountElem.textContent = totalTraineeCount;
+}
+
+const totalBadgeElem = document.getElementById('totalTraineeBadge');
+if (totalBadgeElem) {
+    totalBadgeElem.textContent = `全體 ${totalTraineeCount} 位`;
+}
 
       if (Object.keys(newTrainees).length > 0) {
         Object.assign(trainees, newTrainees);
