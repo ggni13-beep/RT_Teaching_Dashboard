@@ -313,7 +313,7 @@
                 <span class="text-xs text-slate-400">員工編號: RT001</span>
               </div>
               <p class="text-xs text-slate-500 mt-1">
-                指導導師 (Mentor)：張宏達 呼吸治療主任 ｜ 結訓預定：2026年12月 ｜ 總評量完成度：<span class="text-emerald-600 font-bold">98%</span>
+                指導導師 (Mentor)：<span id="currentTraineeMentor"></span> | 結訓預定：2026年12月 | 總評畢業完成度：
               </p>
             </div>
           </div>
@@ -918,6 +918,7 @@
       document.getElementById('currentTraineeName').innerText = data.name;
       document.getElementById('currentTraineeBadge').innerText = data.badge;
       document.getElementById('currentTraineeBadge').className = `text-xs px-2 py-0.5 rounded font-semibold ${data.badgeClass}`;
+      document.getElementById('currentTraineeMentor').innerText = data.mentor || '';
       document.getElementById('traineeSelectDropdown').value = id;
 
       // Update radar chart
