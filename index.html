@@ -912,7 +912,38 @@
     let epaRadarChartInstance = null;
     let wbaCohortChartInstance = null;
     let pecRotationChartInstance = null;
+// ===== 持久化學員資料：儲存 / 讀取最後一次 CSV =====
+const TRAINEE_STORAGE_KEY = 'RT_Teaching_Dashboard_Trainees';
 
+function saveTraineesToStorage() {
+    try {
+        localStorage.setItem(
+            TRAINEE_STORAGE_KEY,
+            JSON.stringify(trainees)
+        );
+    } catch (e) {
+        console.warn('學員資料儲存失敗:', e);
+    }
+}
+
+function loadTraineesFromStorage() {
+    try {
+        const saved = localStorage.getItem(TRAINEE_STORAGE_KEY);
+
+        if (saved) {
+            const savedTrainees = JSON.parse(saved);
+            Object.assign(trainees, savedTrainees);
+            console.log('已載入上次儲存的學員資料');
+            return true;
+        }
+    } catch (e) {
+        console.warn('學員資料讀取失敗:', e);
+    }
+
+    return false;
+}
+
+    
     function selectTrainee(id) {
       const data = trainees[id] || trainees['RT001'];
       document.getElementById('currentTraineeName').innerText = data.name;
@@ -939,6 +970,7 @@
 
     // Initialize Charts on Window Load
     window.addEventListener('load', () => {
+      loadTraineesFromStorage();
       // 1. WBA Cohort Donut
       const ctxWba = document.getElementById('wbaCohortChart').getContext('2d');
       wbaCohortChartInstance = new Chart(ctxWba, {
