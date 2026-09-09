@@ -1144,6 +1144,14 @@ function renderCohortTable() {
     loadTraineesFromStorage();
     renderCohortTable();
 
+    const cccCountElement =
+        document.getElementById('cccTraineeCount');
+
+    if (cccCountElement) {
+        cccCountElement.textContent =
+            Object.keys(trainees).length;
+    }
+
     // 1. WBA Cohort Donut
       const ctxWba = document.getElementById('wbaCohortChart').getContext('2d');
       wbaCohortChartInstance = new Chart(ctxWba, {
