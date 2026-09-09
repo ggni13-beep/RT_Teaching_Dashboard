@@ -1150,15 +1150,30 @@ function loadTraineesFromStorage() {
         else if (role.includes('UGY')) badgeClass = 'badge-ugy';
 
         newTrainees[id] = {
-          name: name,
-          badge: `${role} (${months})`,
-          badgeClass: badgeClass,
-          mentor: mentor,
-          gradDate: '2026年',
-          completion: '85%',
-          epaData: trainees[id] ? trainees[id].epaData : [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
-          status: status
-        };
+    name: name,
+    badge: `${role} (${months})`,
+    badgeClass: badgeClass,
+    mentor: mentor,
+    gradDate: '2026年',
+    completion: '85%',
+
+    // CSV 的 WBA 評量資料
+    miniCEX_comp: miniCEX_comp,
+    miniCEX_targ: miniCEX_targ,
+    dops_comp: dops_comp,
+    dops_targ: dops_targ,
+    pbd_comp: pbd_comp,
+    pbd_targ: pbd_targ,
+    avgEpa: avgEpa,
+    warning: warning,
+
+    // 保留原本 EPA 雷達圖資料
+    epaData: trainees[id]
+        ? trainees[id].epaData
+        : [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0],
+
+    status: status
+};
 
         count++;
 
