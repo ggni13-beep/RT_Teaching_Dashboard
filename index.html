@@ -537,18 +537,8 @@
            <h3 class="text-sm font-bold text-slate-900">本季待審查學員名單 (<span id="cccTraineeCount">0</span>位)</h3>
             <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">審查進度 3/5</span>
           </div>
-          <div id="cccTraineeList" class="space-y-2">
-            
-            </div>
-
-            <div onclick="setCCCTrainee('RT003')"
-              class="ccc-item p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition flex items-center justify-between">
-              <div>
-                <div class="font-bold text-xs text-slate-900">葉O程 (PGY-1, 9M)</div>
-                <div class="text-[11px] text-slate-500">進度正常，階段性考評審查</div>
-              </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">待確認</span>
-            </div>
+         <div class="space-y-2">
+         
           </div>
 
           <!-- CCC Entrustment Criteria Reminder -->
@@ -891,6 +881,17 @@
         epaData: [2.2, 2.0, 2.1, 1.5, 2.0, 1.8, 1.6, 2.0],
         wbaCohort: [4, 6, 2],
         status: "基礎實習期"
+      },
+      RT006: {
+        name: "王O涵",
+        badge: "PGY-1 (第03個月)",
+        badgeClass: "badge-pgy1",
+        mentor: "王雅雯 臨床教師",
+        gradDate: "2027年11月",
+        completion: "42%",
+        epaData: [2.8, 2.6, 2.7, 2.5, 2.8, 2.6, 2.7, 2.5],
+        wbaCohort: [3, 5, 2],
+        status: "發展期 - 持續訓練"
       }
     };
 
@@ -1123,45 +1124,12 @@ function renderCohortTable() {
       const data = trainees[id] || trainees['RT001'];
       document.getElementById('cccCurrentName').innerText = `${data.name} (${data.badge})`;
     }
-function renderCCCTraineeList() {
-    const list = document.getElementById('cccTraineeList');
 
-    if (!list) return;
-
-    list.innerHTML = '';
-
-    Object.keys(trainees).forEach(id => {
-        const data = trainees[id];
-
-        const item = document.createElement('div');
-
-        item.className =
-            'ccc-item p-3 rounded-xl border border-slate-200 bg-white cursor-pointer transition flex items-center justify-between';
-
-        item.onclick = () => setCCCTrainee(id);
-
-        item.innerHTML = `
-            <div>
-                <div class="font-bold text-xs text-slate-900">
-                    ${data.name || id} (${data.badge || ''})
-                </div>
-                <div class="text-[11px] text-slate-500">
-                    ${data.status || '進度正常，階段性考評審查'}
-                </div>
-            </div>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">
-                待確認
-            </span>
-        `;
-
-        list.appendChild(item);
-    });
-}
     // Initialize Charts on Window Load
    window.addEventListener('load', () => {
     loadTraineesFromStorage();
     renderCohortTable();
-renderCCCTraineeList();
+
     const cccCountElement =
         document.getElementById('cccTraineeCount');
 
