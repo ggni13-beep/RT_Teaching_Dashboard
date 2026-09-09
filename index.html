@@ -945,7 +945,23 @@ function loadTraineesFromStorage() {
             if (totalCountElem) {
                 totalCountElem.textContent = totalTraineeCount;
             }
+const traineeRoleCountElem =
+    document.getElementById('traineeRoleCount');
 
+if (traineeRoleCountElem) {
+    const traineeList = Object.values(trainees);
+
+    const pgyCount = traineeList.filter(data =>
+        String(data.badge || '').toUpperCase().includes('PGY')
+    ).length;
+
+    const ugyCount = traineeList.filter(data =>
+        String(data.badge || '').toUpperCase().includes('UGY')
+    ).length;
+
+    traineeRoleCountElem.textContent =
+        `PGY: ${pgyCount} | UGY: ${ugyCount}`;
+}
             const totalBadgeElem =
                 document.getElementById('totalTraineeBadge');
 
