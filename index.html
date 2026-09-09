@@ -1109,9 +1109,11 @@ function renderCohortTable() {
     }
 
     // Initialize Charts on Window Load
-    window.addEventListener('load', () => {
-      loadTraineesFromStorage();
-      // 1. WBA Cohort Donut
+   window.addEventListener('load', () => {
+    loadTraineesFromStorage();
+    renderCohortTable();
+
+    // 1. WBA Cohort Donut
       const ctxWba = document.getElementById('wbaCohortChart').getContext('2d');
       wbaCohortChartInstance = new Chart(ctxWba, {
         type: 'doughnut',
