@@ -537,23 +537,8 @@
            <h3 class="text-sm font-bold text-slate-900">本季待審查學員名單 (<span id="cccTraineeCount">0</span>位)</h3>
             <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">審查進度 3/5</span>
           </div>
-          <div class="space-y-2">
-            <div onclick="setCCCTrainee('RT001')"
-              class="ccc-item p-3 rounded-xl border border-sky-300 bg-sky-50/70 cursor-pointer transition flex items-center justify-between">
-              <div>
-                <div class="font-bold text-xs text-slate-900">葉O昇 (PGY-2, 21M)</div>
-                <div class="text-[11px] text-slate-500">申請：全院獨立值班授權 (Entrustment Level 4)</div>
-              </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">建議准予</span>
-            </div>
-
-            <div onclick="setCCCTrainee('RT004')"
-              class="ccc-item p-3 rounded-xl border border-amber-300 bg-amber-50/50 cursor-pointer transition flex items-center justify-between">
-              <div>
-                <div class="font-bold text-xs text-slate-900">謝O元 (PGY-1, 6M)</div>
-                <div class="text-[11px] text-amber-700">WBA評量落後、需輔導介入</div>
-              </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-900">需補強輔導</span>
+          <div id="cccTraineeList" class="space-y-2">
+            
             </div>
 
             <div onclick="setCCCTrainee('RT003')"
