@@ -1201,9 +1201,13 @@ function loadTraineesFromStorage() {
         }
       }
 
-      // 將 CSV 新增的學員正式合併到 trainees 資料庫
+// 將 CSV 新增的學員正式合併到 trainees 資料庫
 if (Object.keys(newTrainees).length > 0) {
     Object.assign(trainees, newTrainees);
+
+    // 儲存最新學員資料到瀏覽器
+    // 之後重新整理或重新開啟 Dashboard 不需要重新匯入 CSV
+    saveTraineesToStorage();
 }
 
 // 自動更新 Dashboard 顯示的學員總人數
@@ -1219,11 +1223,11 @@ if (totalBadgeElem) {
     totalBadgeElem.textContent = `全體 ${totalTraineeCount} 位`;
 }
 
-      if (Object.keys(newTrainees).length > 0) {
-        Object.assign(trainees, newTrainees);
-        const firstKey = Object.keys(newTrainees)[0];
-        selectTrainee(firstKey);
-      }
+// 如果剛剛有匯入新學員，直接顯示第一位
+if (Object.keys(newTrainees).length > 0) {
+    const firstKey = Object.keys(newTrainees)[0];
+    selectTrainee(firstKey);
+}
     }
 
     function parseEpaCsv(text) {
