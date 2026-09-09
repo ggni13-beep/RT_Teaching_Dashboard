@@ -933,7 +933,56 @@ function loadTraineesFromStorage() {
         if (saved) {
             const savedTrainees = JSON.parse(saved);
             Object.assign(trainees, savedTrainees);
+
             console.log('已載入上次儲存的學員資料');
+
+            // 更新 Dashboard 學員總數
+            const totalTraineeCount = Object.keys(trainees).length;
+
+            const totalCountElem =
+                document.getElementById('totalTraineeCount');
+
+            if (totalCountElem) {
+                totalCountElem.textContent = totalTraineeCount;
+            }
+
+            const totalBadgeElem =
+                document.getElementById('totalTraineeBadge');
+
+            if (totalBadgeElem) {
+                totalBadgeElem.textContent =
+                    `全體 ${totalTraineeCount} 位`;
+            }
+
+            // 更新學員下拉選單
+            const dropdown =
+                document.getElementById('traineeSelectDropdown');
+
+            if (dropdown) {
+                dropdown.innerHTML = '';
+
+                Object.keys(trainees).forEach(id => {
+                    const data = trainees[id];
+
+                    const option =
+                        document.createElement('option');
+
+                    option.value = id;
+
+                    option.innerText =
+                        `${data.name} (${data.badge || ''})`;
+
+                    dropdown.appendChild(option);
+                });
+            }
+
+            // 自動選擇第一位學員
+            const firstKey = Object.keys(trainees)[0];
+
+            if (firstKey) {
+                selectTrainee(firstKey);
+            }
+
             return true;
         }
     } catch (e) {
@@ -942,7 +991,6 @@ function loadTraineesFromStorage() {
 
     return false;
 }
-
     
     function selectTrainee(id) {
       const data = trainees[id] || trainees['RT001'];
