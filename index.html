@@ -949,15 +949,24 @@ const traineeRoleCountElem =
     document.getElementById('traineeRoleCount');
 
 if (traineeRoleCountElem) {
-    const traineeList = Object.values(trainees);
+    const traineeIds = Object.keys(trainees);
 
-    const pgyCount = traineeList.filter(data =>
-        String(data.badge || '').toUpperCase().includes('PGY')
-    ).length;
+    let pgyCount = 0;
+    let ugyCount = 0;
 
-    const ugyCount = traineeList.filter(data =>
-        String(data.badge || '').toUpperCase().includes('UGY')
-    ).length;
+    traineeIds.forEach(id => {
+        const trainee = trainees[id];
+
+        if (!trainee) return;
+
+        const badge = String(trainee.badge || '').trim().toUpperCase();
+
+        if (badge.startsWith('PGY')) {
+            pgyCount++;
+        } else if (badge.includes('UGY')) {
+            ugyCount++;
+        }
+    });
 
     traineeRoleCountElem.textContent =
         `PGY: ${pgyCount} | UGY: ${ugyCount}`;
