@@ -916,8 +916,7 @@
     function selectTrainee(id) {
       const data = trainees[id] || trainees['RT001'];
       document.getElementById('currentTraineeName').innerText = data.name;
-     document.getElementById('currentTraineeAvatar').textContent =
-    data.name ? data.name.trim().charAt(0) : '';
+     document.getElementById('currentTraineeAvatar').textContent = String(data.name || '').trim().slice(0, 1);
       document.getElementById('currentTraineeBadge').innerText = data.badge;
       document.getElementById('currentTraineeBadge').className = `text-xs px-2 py-0.5 rounded font-semibold ${data.badgeClass}`;
       document.getElementById('currentTraineeMentor').innerText = data.mentor || '';
