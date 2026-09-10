@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -534,60 +535,17 @@
         <!-- Trainee Review Queue -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
-           <h3 class="text-sm font-bold text-slate-900">本季待審查學員名單 (<span id="cccTraineeCount">0</span>位)</h3>
-            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">審查進度 3/5</span>
+            <h3 class="text-sm font-bold text-slate-900">
+              本季待審查學員名單 (<span id="cccTraineeCount">0</span>位)
+            </h3>
+            <span id="cccReviewProgress"
+              class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+              審查進度
+            </span>
           </div>
-         <div class="space-y-2">
 
-  <div onclick="setCCCTrainee('RT001')"
-    class="ccc-item p-3 rounded-xl border border-sky-300 bg-sky-50/70 cursor-pointer transition flex items-center justify-between">
-    <div>
-      <div class="font-bold text-xs text-slate-900">葉O昇 (PGY-2, 21M)</div>
-      <div class="text-[11px] text-slate-500">申請：全院獨立值班授權 (Entrustment Level 4)</div>
-    </div>
-    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">建議准予</span>
-  </div>
-  <div onclick="setCCCTrainee('RT002')"
-    class="ccc-item p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition flex items-center justify-between">
-    <div>
-      <div class="font-bold text-xs text-slate-900">詹O萱 (PGY-2, 18M)</div>
-      <div class="text-[11px] text-slate-500">進度穩定，階段性考評審查</div>
-    </div>
-    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">待確認</span>
-  </div>
-    <div onclick="setCCCTrainee('RT003')"
-    class="ccc-item p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition flex items-center justify-between">
-    <div>
-      <div class="font-bold text-xs text-slate-900">葉O程 (PGY-1, 9M)</div>
-      <div class="text-[11px] text-slate-500">進度正常，階段性考評審查</div>
-    </div>
-    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">待確認</span>
-  </div>         
-             <div onclick="setCCCTrainee('RT004')"
-    class="ccc-item p-3 rounded-xl border border-amber-300 bg-amber-50/50 cursor-pointer transition flex items-center justify-between">
-    <div>
-      <div class="font-bold text-xs text-slate-900">謝O元 (PGY-1, 6M)</div>
-      <div class="text-[11px] text-amber-700">WBA評量落後、需輔導介入</div>
-    </div>
-    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-900">需補強輔導</span>
-  </div>
-        <div onclick="setCCCTrainee('RT005')"
-    class="ccc-item p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition flex items-center justify-between">
-    <div>
-      <div class="font-bold text-xs text-slate-900">陳O怡 (實習生 UGY)</div>
-      <div class="text-[11px] text-slate-500">基礎實習階段，進行階段性考評</div>
-    </div>
-    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">待確認</span>
-  </div>    
-           <div onclick="setCCCTrainee('RT006')"
-    class="ccc-item p-3 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition flex items-center justify-between">
-    <div>
-      <div class="font-bold text-xs text-slate-900">王O涵 (PGY-1, 3M)</div>
-      <div class="text-[11px] text-slate-500">進入訓練初期，進行階段性考評</div>
-    </div>
-    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">待確認</span>
-  </div>
-</div>
+          <!-- 重要：此處不再寫死姓名；一律由 trainees 資料庫動態產生 -->
+          <div id="cccTraineeQueue" class="space-y-2"></div>
 
           <!-- CCC Entrustment Criteria Reminder -->
           <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-[11px] space-y-1 text-slate-600">
@@ -1171,15 +1129,118 @@ function renderCohortTable() {
       switchTab('trainee');
     }
 
+    // ===== CCC 左右學員連結：左側清單與右側資料一律使用同一個 trainee ID =====
+    let currentCCCTraineeId = 'RT001';
+
+    function getCCCReason(data) {
+      const status = String(data?.status || '').trim();
+
+      if (status.includes('預警') || status.includes('補強') || status.includes('輔導')) {
+        return {
+          text: 'WBA評量落後、需輔導介入',
+          badge: '需補強輔導',
+          badgeClass: 'bg-amber-200 text-amber-900',
+          boxClass: 'border-amber-300 bg-amber-50/50',
+          subClass: 'text-amber-700'
+        };
+      }
+
+      if (status.includes('成熟') || status.includes('獨立')) {
+        return {
+          text: '申請：全院獨立值班授權 (Entrustment Level 4)',
+          badge: '建議准予',
+          badgeClass: 'bg-emerald-100 text-emerald-800',
+          boxClass: 'border-sky-300 bg-sky-50/70',
+          subClass: 'text-slate-500'
+        };
+      }
+
+      return {
+        text: '進度穩定，階段性考評審查',
+        badge: '待確認',
+        badgeClass: 'bg-blue-100 text-blue-800',
+        boxClass: 'border-slate-200 bg-white',
+        subClass: 'text-slate-500'
+      };
+    }
+
+    function renderCCCQueue() {
+      const queue = document.getElementById('cccTraineeQueue');
+      const count = document.getElementById('cccTraineeCount');
+      const progress = document.getElementById('cccReviewProgress');
+
+      if (!queue) return;
+
+      const ids = Object.keys(trainees);
+      if (count) count.textContent = ids.length;
+
+      const reviewedCount = ids.filter(id => {
+        const status = String(trainees[id]?.status || '');
+        return status.includes('通過') ||
+               status.includes('成熟') ||
+               status.includes('獨立') ||
+               status.includes('准予');
+      }).length;
+
+      if (progress) {
+        progress.textContent = `審查進度 ${Math.min(reviewedCount, ids.length)}/${ids.length}`;
+      }
+
+      queue.innerHTML = '';
+
+      ids.forEach(id => {
+        const data = trainees[id];
+        if (!data) return;
+
+        const reason = getCCCReason(data);
+        const active = id === currentCCCTraineeId;
+
+        const item = document.createElement('div');
+        item.className =
+          `ccc-item p-3 rounded-xl border cursor-pointer transition flex items-center justify-between ` +
+          `${active ? reason.boxClass : 'border-slate-200 hover:border-slate-300 bg-white'}`;
+
+        item.onclick = () => setCCCTrainee(id);
+
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-xs text-slate-900">
+              ${data.name || id} (${data.badge || ''})
+            </div>
+            <div class="text-[11px] ${reason.subClass}">
+              ${reason.text}
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded ${reason.badgeClass}">
+            ${reason.badge}
+          </span>
+        `;
+
+        queue.appendChild(item);
+      });
+    }
+
     function setCCCTrainee(id) {
-      const data = trainees[id] || trainees['RT001'];
-      document.getElementById('cccCurrentName').innerText = `${data.name} (${data.badge})`;
+      if (!trainees[id]) return;
+
+      currentCCCTraineeId = id;
+      const data = trainees[id];
+
+      // 右側「當前審查學員」完全依據同一個 ID 讀取
+      const nameElement = document.getElementById('cccCurrentName');
+      if (nameElement) {
+        nameElement.innerText = `${data.name || id} (${data.badge || ''})`;
+      }
+
+      // 左側重新 render，確保目前選取項目與右側完全同步
+      renderCCCQueue();
     }
 
     // Initialize Charts on Window Load
    window.addEventListener('load', () => {
     loadTraineesFromStorage();
     renderCohortTable();
+    renderCCCQueue();
 
     const cccCountElement =
         document.getElementById('cccTraineeCount');
@@ -1495,6 +1556,8 @@ if (Object.keys(newTrainees).length > 0) {
       if (curId && trainees[curId]) {
         selectTrainee(curId);
       }
+
+      renderCCCQueue();
     }
 </script>
     <!-- IMPORT CSV MODAL -->
@@ -1543,3 +1606,4 @@ if (Object.keys(newTrainees).length > 0) {
 </body >
 
 </html >
+```
